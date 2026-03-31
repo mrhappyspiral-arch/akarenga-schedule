@@ -19,7 +19,7 @@
       color: #1a1a1a;
       font-size: 1rem;
       line-height: 1.8;
-      padding: 0 0 40px;
+      padding: 0 0 80px;
     }
 
     header {
@@ -186,6 +186,72 @@
     .legend-dot.committee { background: #f0e6d3; }
     .legend-dot.regular { background: #d4e8d4; }
 
+    .past-section {
+      margin-top: 28px;
+    }
+
+    .past-section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 16px;
+      background: #e8e8e4;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: #666;
+      user-select: none;
+    }
+
+    .past-section-header:active {
+      background: #ddd;
+    }
+
+    .toggle-icon {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #999;
+    }
+
+    .past-section-body {
+      margin-top: 12px;
+    }
+
+    .past-section-body .month-card {
+      opacity: 0.7;
+    }
+
+    .fixed-cta {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 12px 16px;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(8px);
+      box-shadow: 0 -2px 8px rgba(0,0,0,0.1);
+      text-align: center;
+      z-index: 100;
+    }
+
+    .fixed-cta a {
+      display: inline-block;
+      background: #8b2525;
+      color: #fff;
+      text-decoration: none;
+      font-size: 1rem;
+      font-weight: 700;
+      padding: 12px 32px;
+      border-radius: 8px;
+      width: 100%;
+      max-width: 400px;
+    }
+
+    .fixed-cta a:active {
+      background: #6e1d1d;
+    }
+
     .loading {
       text-align: center;
       padding: 60px 20px;
@@ -233,6 +299,10 @@
     <div class="last-updated" id="last-updated"></div>
   </div>
 
+  <div class="fixed-cta">
+    <a href="https://member.sofu-shinseikai.or.jp/login" target="_blank" rel="noopener">申込はこちら（マイページ）</a>
+  </div>
+
   <script>
     // ============================================
     // Google Sheets CSV公開URLをここに設定
@@ -270,38 +340,81 @@
       return '';
     }
 
-    function renderSchedule(data) {
-      const container = document.getElementById('schedule-body');
-      let html = '';
+    function renderMonthCard(month, status) {
+      let html = `<div class="month-card">`;
+      html += `<div class="month-header ${status}">${month.month}</div>`;
 
-      for (const month of data) {
-        const status = getMonthStatus(month.month);
-        html += `<div class="month-card">`;
-        html += `<div class="month-header ${status}">${month.month}</div>`;
+      for (const ev of month.events) {
+        const isCommittee = ev.type.includes('運営');
+        const badgeClass = isCommittee ? 'committee' : 'regular';
+        const badgeLabel = isCommittee ? '準備' : '定例会';
+        const venueText = ev.venue || '未定';
+        const venueClass = ev.venue ? '' : 'tbd';
 
-        for (const ev of month.events) {
-          const isCommittee = ev.type.includes('運営');
-          const badgeClass = isCommittee ? 'committee' : 'regular';
-          const badgeLabel = isCommittee ? '準備' : '定例会';
-          const venueText = ev.venue || '未定';
-          const venueClass = ev.venue ? '' : 'tbd';
-
-          html += `<div class="event-row">`;
-          html += `  <span class="event-badge ${badgeClass}">${badgeLabel}</span>`;
-          html += `  <div class="event-detail">`;
-          html += `    <div class="event-date">${ev.date}${ev.time ? ' <span class="event-time">' + ev.time + '</span>' : ''}</div>`;
-          html += `    <div class="event-venue ${venueClass}">${venueText}</div>`;
-          if (ev.afterparty) {
-            html += `  <div class="afterparty">2次会: ${ev.afterparty}</div>`;
-          }
-          html += `  </div>`;
-          html += `</div>`;
+        html += `<div class="event-row">`;
+        html += `  <span class="event-badge ${badgeClass}">${badgeLabel}</span>`;
+        html += `  <div class="event-detail">`;
+        html += `    <div class="event-date">${ev.date}${ev.time ? ' <span class="event-time">' + ev.time + '</span>' : ''}</div>`;
+        html += `    <div class="event-venue ${venueClass}">${venueText}</div>`;
+        if (ev.afterparty) {
+          html += `  <div class="afterparty">2次会: ${ev.afterparty}</div>`;
         }
-
+        html += `  </div>`;
         html += `</div>`;
       }
 
+      html += `</div>`;
+      return html;
+    }
+
+    function renderSchedule(data) {
+      const container = document.getElementById('schedule-body');
+      const upcoming = [];
+      const past = [];
+
+      for (const month of data) {
+        const status = getMonthStatus(month.month);
+        if (status === 'past') {
+          past.push({ month, status });
+        } else {
+          upcoming.push({ month, status });
+        }
+      }
+
+      let html = '';
+      for (const { month, status } of upcoming) {
+        html += renderMonthCard(month, status);
+      }
+
+      if (past.length > 0) {
+        html += `<div class="past-section">`;
+        html += `<div class="past-section-header" id="past-toggle">`;
+        html += `  <span>終了済みのイベント（${past.length}ヶ月分）</span>`;
+        html += `  <span class="toggle-icon" id="toggle-icon">+</span>`;
+        html += `</div>`;
+        html += `<div class="past-section-body" id="past-body" style="display:none;">`;
+        for (const { month, status } of past) {
+          html += renderMonthCard(month, status);
+        }
+        html += `</div></div>`;
+      }
+
       container.innerHTML = html;
+
+      const toggle = document.getElementById('past-toggle');
+      if (toggle) {
+        toggle.addEventListener('click', () => {
+          const body = document.getElementById('past-body');
+          const icon = document.getElementById('toggle-icon');
+          if (body.style.display === 'none') {
+            body.style.display = 'block';
+            icon.textContent = '-';
+          } else {
+            body.style.display = 'none';
+            icon.textContent = '+';
+          }
+        });
+      }
     }
 
     function parseCSV(csvText) {
