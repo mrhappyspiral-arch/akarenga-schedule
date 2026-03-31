@@ -71,6 +71,7 @@
 
     .legend-dot.committee { background: #d48c2e; }
     .legend-dot.regular { background: #e06c50; }
+    .legend-dot.other { background: #3d5a80; }
 
     /* --- Month Card --- */
     .month-card {
@@ -143,6 +144,12 @@
       background: #fce8e4;
       color: #b84a34;
       border: 1px solid #e8a090;
+    }
+
+    .event-badge.other {
+      background: #e8eef4;
+      color: #3d5a80;
+      border: 1px solid #a0b8d0;
     }
 
     .event-detail {
@@ -314,11 +321,15 @@
     <div class="legend">
       <div class="legend-item">
         <div class="legend-dot committee"></div>
-        <span>運営委員会（準備）</span>
+        <span>運営委員会</span>
       </div>
       <div class="legend-item">
         <div class="legend-dot regular"></div>
         <span>定例会</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot other"></div>
+        <span>その他イベント</span>
       </div>
     </div>
 
@@ -376,8 +387,9 @@
 
       for (const ev of month.events) {
         const isCommittee = ev.type.includes('運営');
-        const badgeClass = isCommittee ? 'committee' : 'regular';
-        const badgeLabel = isCommittee ? '準備' : '定例会';
+        const isRegular = ev.type.includes('定例会');
+        const badgeClass = isCommittee ? 'committee' : isRegular ? 'regular' : 'other';
+        const badgeLabel = ev.type;
         const venueText = ev.venue || '未定';
         const venueClass = ev.venue ? '' : 'tbd';
 
