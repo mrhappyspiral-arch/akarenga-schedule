@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>定例会&運営委員会 スケジュール</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Noto Sans JP', sans-serif;
+      background: #f5f5f0;
+      color: #1a1a1a;
+      font-size: 1rem;
+      line-height: 1.8;
+      padding: 0 0 40px;
+    }
+
+    header {
+      background: linear-gradient(135deg, #8b2525 0%, #a63030 100%);
+      color: #fff;
+      padding: 28px 16px;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+    }
+
+    header p {
+      font-size: 0.95rem;
+      margin-top: 6px;
+      opacity: 0.85;
+    }
+
+    .year-label {
+      text-align: center;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: #666;
+      margin: 16px 0 8px;
+    }
+
+    .schedule-container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 0 12px;
+    }
+
+    .month-card {
+      background: #fff;
+      border-radius: 12px;
+      margin-bottom: 12px;
+      overflow: hidden;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+
+    .month-header {
+      background: #8b2525;
+      color: #fff;
+      padding: 12px 16px;
+      font-size: 1.15rem;
+      font-weight: 700;
+    }
+
+    .month-header.past {
+      background: #999;
+    }
+
+    .month-header.current {
+      background: #c44d4d;
+      position: relative;
+    }
+
+    .month-header.current::after {
+      content: "NOW";
+      font-size: 0.75rem;
+      background: #fff;
+      color: #c44d4d;
+      padding: 1px 8px;
+      border-radius: 8px;
+      margin-left: 8px;
+      font-weight: 700;
+      vertical-align: middle;
+    }
+
+    .event-row {
+      padding: 14px 16px;
+      border-bottom: 1px solid #f0f0f0;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .event-row:last-child {
+      border-bottom: none;
+    }
+
+    .event-badge {
+      flex-shrink: 0;
+      font-size: 0.85rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 4px;
+      white-space: nowrap;
+      margin-top: 2px;
+    }
+
+    .event-badge.committee {
+      background: #f0e6d3;
+      color: #8b6914;
+    }
+
+    .event-badge.regular {
+      background: #d4e8d4;
+      color: #2d6a2d;
+    }
+
+    .event-detail {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .event-date {
+      font-size: 1.05rem;
+      font-weight: 500;
+      color: #1a1a1a;
+    }
+
+    .event-time {
+      font-size: 0.9rem;
+      color: #888;
+      font-weight: 400;
+      margin-left: 6px;
+    }
+
+    .event-venue {
+      font-size: 0.95rem;
+      color: #555;
+      margin-top: 3px;
+    }
+
+    .event-venue.tbd {
+      color: #b0b0b0;
+      font-style: italic;
+    }
+
+    .afterparty {
+      font-size: 0.9rem;
+      color: #888;
+      margin-top: 4px;
+      padding-left: 12px;
+      border-left: 2px solid #e0e0e0;
+    }
+
+    .legend {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      margin: 16px 0;
+      flex-wrap: wrap;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.9rem;
+      color: #666;
+    }
+
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 3px;
+    }
+
+    .legend-dot.committee { background: #f0e6d3; }
+    .legend-dot.regular { background: #d4e8d4; }
+
+    .loading {
+      text-align: center;
+      padding: 60px 20px;
+      color: #999;
+      font-size: 0.9rem;
+    }
+
+    .error-msg {
+      text-align: center;
+      padding: 40px 20px;
+      color: #c44d4d;
+      font-size: 0.85rem;
+    }
+
+    .last-updated {
+      text-align: center;
+      font-size: 0.85rem;
+      color: #aaa;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>定例会 & 運営委員会 スケジュール</h1>
+    <p>2026年3月 - 2027年2月</p>
+  </header>
+
+  <div class="schedule-container">
+    <div class="legend">
+      <div class="legend-item">
+        <div class="legend-dot committee"></div>
+        <span>運営委員会（準備）</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot regular"></div>
+        <span>定例会</span>
+      </div>
+    </div>
+
+    <div id="schedule-body">
+      <div class="loading">読み込み中...</div>
+    </div>
+
+    <div class="last-updated" id="last-updated"></div>
+  </div>
+
+  <script>
+    // ============================================
+    // Google Sheets CSV公開URLをここに設定
+    // ============================================
+    const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQOIuvMihEfsLO3qdbN7TMPdB87Hz3BYjU1gTUJpKDVhxHtnPEoDxG8ZW1J91PsEAeWeQV1C4gWo_oA/pub?gid=0&single=true&output=csv';
+
+    function getCurrentMonth() {
+      const now = new Date();
+      return `${now.getMonth() + 1}月`;
+    }
+
+    function isMonthPast(monthLabel) {
+      const monthNum = parseInt(monthLabel);
+      const now = new Date();
+      const currentYear = now.getFullYear();
+      const currentMonth = now.getMonth() + 1;
+
+      // 3月始まりの年度計算
+      let eventYear;
+      if (monthNum >= 3) {
+        eventYear = 2026;
+      } else {
+        eventYear = 2027;
+      }
+
+      if (eventYear < currentYear) return true;
+      if (eventYear > currentYear) return false;
+      return monthNum < currentMonth;
+    }
+
+    function getMonthStatus(monthLabel) {
+      const current = getCurrentMonth();
+      if (monthLabel === current) return 'current';
+      if (isMonthPast(monthLabel)) return 'past';
+      return '';
+    }
+
+    function renderSchedule(data) {
+      const container = document.getElementById('schedule-body');
+      let html = '';
+
+      for (const month of data) {
+        const status = getMonthStatus(month.month);
+        html += `<div class="month-card">`;
+        html += `<div class="month-header ${status}">${month.month}</div>`;
+
+        for (const ev of month.events) {
+          const isCommittee = ev.type.includes('運営');
+          const badgeClass = isCommittee ? 'committee' : 'regular';
+          const badgeLabel = isCommittee ? '準備' : '定例会';
+          const venueText = ev.venue || '未定';
+          const venueClass = ev.venue ? '' : 'tbd';
+
+          html += `<div class="event-row">`;
+          html += `  <span class="event-badge ${badgeClass}">${badgeLabel}</span>`;
+          html += `  <div class="event-detail">`;
+          html += `    <div class="event-date">${ev.date}${ev.time ? ' <span class="event-time">' + ev.time + '</span>' : ''}</div>`;
+          html += `    <div class="event-venue ${venueClass}">${venueText}</div>`;
+          if (ev.afterparty) {
+            html += `  <div class="afterparty">2次会: ${ev.afterparty}</div>`;
+          }
+          html += `  </div>`;
+          html += `</div>`;
+        }
+
+        html += `</div>`;
+      }
+
+      container.innerHTML = html;
+    }
+
+    function parseCSV(csvText) {
+      const lines = csvText.split('\n').map(line => {
+        const result = [];
+        let current = '';
+        let inQuotes = false;
+        for (const char of line) {
+          if (char === '"') {
+            inQuotes = !inQuotes;
+          } else if (char === ',' && !inQuotes) {
+            result.push(current.trim());
+            current = '';
+          } else {
+            current += char;
+          }
+        }
+        result.push(current.trim());
+        return result;
+      });
+
+      // ヘッダー2行をスキップ（Row 1: タイトル, Row 2: カラムヘッダー）
+      const dataRows = lines.slice(2);
+
+      // 左半分のみ使用（A-G列: 今年度分）
+      // A=月, B=イベント種別, C=日程, D=会場, E=時間, F=2次会会場, G=2次会時間
+      const months = [];
+      let currentMonth = null;
+
+      for (const row of dataRows) {
+        const monthLabel = row[0] ? row[0].trim() : '';
+        const eventType = row[1] ? row[1].trim() : '';
+        const date = row[2] ? row[2].trim() : '';
+        const venue = row[3] ? row[3].trim() : '';
+        const time = row[4] ? row[4].trim() : '';
+        const apVenue = row[5] ? row[5].trim() : '';
+        const apTime = row[6] ? row[6].trim() : '';
+
+        if (!monthLabel && !eventType && !date) continue;
+
+        if (monthLabel) {
+          currentMonth = { month: monthLabel, events: [] };
+          months.push(currentMonth);
+        }
+
+        if (currentMonth && eventType && date) {
+          const apVenueDisplay = apVenue || (apTime ? '会場未定' : '');
+          const afterparty = [apVenueDisplay, apTime].filter(Boolean).join(' ');
+          currentMonth.events.push({ type: eventType, date, venue, time, afterparty });
+        }
+      }
+
+      return months;
+    }
+
+    async function loadFromSheet() {
+      if (!SHEET_CSV_URL) {
+        renderSchedule(DUMMY_DATA);
+        document.getElementById('last-updated').textContent = 'ダミーデータ表示中（スプシ連携未設定）';
+        return;
+      }
+
+      try {
+        const response = await fetch(SHEET_CSV_URL);
+        if (!response.ok) throw new Error('データ取得に失敗しました');
+        const csvText = await response.text();
+        const data = parseCSV(csvText);
+
+        if (data.length === 0) throw new Error('データが見つかりませんでした');
+
+        renderSchedule(data);
+        const now = new Date();
+        const timeStr = `${now.getFullYear()}/${now.getMonth()+1}/${now.getDate()} ${now.getHours()}:${String(now.getMinutes()).padStart(2,'0')}`;
+        document.getElementById('last-updated').textContent = `最終取得: ${timeStr}`;
+      } catch (e) {
+        document.getElementById('schedule-body').innerHTML =
+          `<div class="error-msg">${e.message}<br>再読み込みしてください</div>`;
+      }
+    }
+
+    loadFromSheet();
+  </script>
+</body>
+</html>
