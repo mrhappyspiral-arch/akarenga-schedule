@@ -15,15 +15,15 @@
 
     body {
       font-family: 'Noto Sans JP', sans-serif;
-      background: #f5f5f0;
-      color: #1a1a1a;
+      background: #fff;
+      color: #222;
       font-size: 1rem;
       line-height: 1.8;
       padding: 0 0 80px;
     }
 
     header {
-      background: linear-gradient(135deg, #8b2525 0%, #a63030 100%);
+      background: linear-gradient(135deg, #3d4f5f 0%, #506878 100%);
       color: #fff;
       padding: 28px 16px;
       text-align: center;
@@ -38,15 +38,7 @@
     header p {
       font-size: 0.95rem;
       margin-top: 6px;
-      opacity: 0.85;
-    }
-
-    .year-label {
-      text-align: center;
-      font-size: 0.85rem;
-      font-weight: 500;
-      color: #666;
-      margin: 16px 0 8px;
+      opacity: 0.9;
     }
 
     .schedule-container {
@@ -55,16 +47,42 @@
       padding: 0 12px;
     }
 
+    .legend {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      margin: 20px 0 12px;
+      flex-wrap: wrap;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.9rem;
+      color: #444;
+    }
+
+    .legend-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 3px;
+    }
+
+    .legend-dot.committee { background: #d48c2e; }
+    .legend-dot.regular { background: #e06c50; }
+
+    /* --- Month Card --- */
     .month-card {
       background: #fff;
       border-radius: 12px;
-      margin-bottom: 12px;
+      margin-bottom: 14px;
       overflow: hidden;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+      border: 1px solid #e5e5e5;
     }
 
     .month-header {
-      background: #8b2525;
+      background: #3d4f5f;
       color: #fff;
       padding: 12px 16px;
       font-size: 1.15rem;
@@ -72,29 +90,30 @@
     }
 
     .month-header.past {
-      background: #999;
+      background: #98a5b0;
     }
 
     .month-header.current {
-      background: #c44d4d;
+      background: #506878;
       position: relative;
     }
 
     .month-header.current::after {
       content: "NOW";
       font-size: 0.75rem;
-      background: #fff;
-      color: #c44d4d;
-      padding: 1px 8px;
-      border-radius: 8px;
-      margin-left: 8px;
+      background: #e06c50;
+      color: #fff;
+      padding: 2px 10px;
+      border-radius: 10px;
+      margin-left: 10px;
       font-weight: 700;
       vertical-align: middle;
     }
 
+    /* --- Event Row --- */
     .event-row {
-      padding: 14px 16px;
-      border-bottom: 1px solid #f0f0f0;
+      padding: 16px;
+      border-bottom: 1px solid #eee;
       display: flex;
       gap: 12px;
       align-items: flex-start;
@@ -108,20 +127,22 @@
       flex-shrink: 0;
       font-size: 0.85rem;
       font-weight: 700;
-      padding: 4px 10px;
+      padding: 4px 12px;
       border-radius: 4px;
       white-space: nowrap;
       margin-top: 2px;
     }
 
     .event-badge.committee {
-      background: #f0e6d3;
-      color: #8b6914;
+      background: #fdf0d5;
+      color: #8a6200;
+      border: 1px solid #d4a84a;
     }
 
     .event-badge.regular {
-      background: #d4e8d4;
-      color: #2d6a2d;
+      background: #fce8e4;
+      color: #b84a34;
+      border: 1px solid #e8a090;
     }
 
     .event-detail {
@@ -130,62 +151,67 @@
     }
 
     .event-date {
-      font-size: 1.05rem;
-      font-weight: 500;
-      color: #1a1a1a;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #222;
     }
 
-    .event-time {
-      font-size: 0.9rem;
-      color: #888;
-      font-weight: 400;
-      margin-left: 6px;
-    }
-
-    .event-venue {
-      font-size: 0.95rem;
-      color: #555;
-      margin-top: 3px;
-    }
-
-    .event-venue.tbd {
-      color: #b0b0b0;
-      font-style: italic;
-    }
-
-    .afterparty {
-      font-size: 0.9rem;
-      color: #888;
-      margin-top: 4px;
-      padding-left: 12px;
-      border-left: 2px solid #e0e0e0;
-    }
-
-    .legend {
+    /* --- Info Grid --- */
+    .event-info {
       display: flex;
       gap: 16px;
-      justify-content: center;
-      margin: 16px 0;
+      margin-top: 8px;
       flex-wrap: wrap;
     }
 
-    .legend-item {
+    .info-item {
       display: flex;
-      align-items: center;
+      align-items: baseline;
       gap: 6px;
-      font-size: 0.9rem;
-      color: #666;
     }
 
-    .legend-dot {
-      width: 10px;
-      height: 10px;
+    .info-label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #fff;
+      background: #5a7080;
+      padding: 2px 8px;
       border-radius: 3px;
+      white-space: nowrap;
     }
 
-    .legend-dot.committee { background: #f0e6d3; }
-    .legend-dot.regular { background: #d4e8d4; }
+    .info-value {
+      font-size: 1rem;
+      font-weight: 500;
+      color: #222;
+    }
 
+    .info-value.tbd {
+      color: #666;
+      font-style: italic;
+    }
+
+    /* --- Afterparty --- */
+    .afterparty-section {
+      margin-top: 8px;
+      padding: 8px 10px;
+      background: #faf5f3;
+      border-radius: 6px;
+      border: 1px solid #e8cfc8;
+    }
+
+    .afterparty-section .info-row {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      align-items: baseline;
+    }
+
+    .afterparty-section .info-label {
+      background: #d48c2e;
+    }
+
+    /* --- Past Section --- */
     .past-section {
       margin-top: 28px;
     }
@@ -195,23 +221,24 @@
       justify-content: space-between;
       align-items: center;
       padding: 12px 16px;
-      background: #e8e8e4;
+      background: #f0f0f0;
       border-radius: 8px;
       cursor: pointer;
       font-size: 0.95rem;
       font-weight: 500;
-      color: #666;
+      color: #555;
       user-select: none;
+      border: 1px solid #ddd;
     }
 
     .past-section-header:active {
-      background: #ddd;
+      background: #e5e5e5;
     }
 
     .toggle-icon {
       font-size: 1.2rem;
       font-weight: 700;
-      color: #999;
+      color: #555;
     }
 
     .past-section-body {
@@ -219,57 +246,60 @@
     }
 
     .past-section-body .month-card {
-      opacity: 0.7;
+      opacity: 0.65;
     }
 
+    /* --- Fixed CTA --- */
     .fixed-cta {
       position: fixed;
       bottom: 0;
       left: 0;
       right: 0;
       padding: 12px 16px;
-      background: rgba(255, 255, 255, 0.95);
+      background: rgba(255, 255, 255, 0.96);
       backdrop-filter: blur(8px);
-      box-shadow: 0 -2px 8px rgba(0,0,0,0.1);
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.12);
       text-align: center;
       z-index: 100;
     }
 
     .fixed-cta a {
       display: inline-block;
-      background: #8b2525;
+      background: #e06c50;
       color: #fff;
       text-decoration: none;
       font-size: 1rem;
       font-weight: 700;
-      padding: 12px 32px;
+      padding: 14px 32px;
       border-radius: 8px;
       width: 100%;
       max-width: 400px;
+      transition: background 0.15s;
     }
 
     .fixed-cta a:active {
-      background: #6e1d1d;
+      background: #c45a40;
     }
 
+    /* --- Utility --- */
     .loading {
       text-align: center;
       padding: 60px 20px;
-      color: #999;
-      font-size: 0.9rem;
+      color: #666;
+      font-size: 1rem;
     }
 
     .error-msg {
       text-align: center;
       padding: 40px 20px;
-      color: #c44d4d;
-      font-size: 0.85rem;
+      color: #c45a40;
+      font-size: 0.95rem;
     }
 
     .last-updated {
       text-align: center;
       font-size: 0.85rem;
-      color: #aaa;
+      color: #666;
       margin-top: 20px;
     }
   </style>
@@ -304,9 +334,6 @@
   </div>
 
   <script>
-    // ============================================
-    // Google Sheets CSV公開URLをここに設定
-    // ============================================
     const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQOIuvMihEfsLO3qdbN7TMPdB87Hz3BYjU1gTUJpKDVhxHtnPEoDxG8ZW1J91PsEAeWeQV1C4gWo_oA/pub?gid=0&single=true&output=csv';
 
     function getCurrentMonth() {
@@ -320,7 +347,6 @@
       const currentYear = now.getFullYear();
       const currentMonth = now.getMonth() + 1;
 
-      // 3月始まりの年度計算
       let eventYear;
       if (monthNum >= 3) {
         eventYear = 2026;
@@ -340,6 +366,10 @@
       return '';
     }
 
+    function renderInfoItem(label, value, valueClass) {
+      return `<div class="info-item"><span class="info-label">${label}</span><span class="info-value ${valueClass || ''}">${value}</span></div>`;
+    }
+
     function renderMonthCard(month, status) {
       let html = `<div class="month-card">`;
       html += `<div class="month-header ${status}">${month.month}</div>`;
@@ -354,11 +384,23 @@
         html += `<div class="event-row">`;
         html += `  <span class="event-badge ${badgeClass}">${badgeLabel}</span>`;
         html += `  <div class="event-detail">`;
-        html += `    <div class="event-date">${ev.date}${ev.time ? ' <span class="event-time">' + ev.time + '</span>' : ''}</div>`;
-        html += `    <div class="event-venue ${venueClass}">${venueText}</div>`;
-        if (ev.afterparty) {
-          html += `  <div class="afterparty">2次会: ${ev.afterparty}</div>`;
+        html += `    <div class="event-date">${ev.date}</div>`;
+        html += `    <div class="event-info">`;
+        html += renderInfoItem('会場', venueText, venueClass);
+        if (ev.time) {
+          html += renderInfoItem('時間', ev.time);
         }
+        html += `    </div>`;
+
+        if (ev.apVenue || ev.apTime) {
+          html += `<div class="afterparty-section"><div class="info-row">`;
+          html += renderInfoItem('2次会', ev.apVenue || '会場未定', ev.apVenue ? '' : 'tbd');
+          if (ev.apTime) {
+            html += renderInfoItem('時間', ev.apTime);
+          }
+          html += `</div></div>`;
+        }
+
         html += `  </div>`;
         html += `</div>`;
       }
@@ -436,10 +478,8 @@
         return result;
       });
 
-      // ヘッダー2行をスキップ（Row 1: タイトル, Row 2: カラムヘッダー）
       const dataRows = lines.slice(2);
 
-      // 左半分のみ使用（A-G列: 今年度分）
       // A=月, B=イベント種別, C=日程, D=会場, E=時間, F=2次会会場, G=2次会時間
       const months = [];
       let currentMonth = null;
@@ -461,9 +501,7 @@
         }
 
         if (currentMonth && eventType && date) {
-          const apVenueDisplay = apVenue || (apTime ? '会場未定' : '');
-          const afterparty = [apVenueDisplay, apTime].filter(Boolean).join(' ');
-          currentMonth.events.push({ type: eventType, date, venue, time, afterparty });
+          currentMonth.events.push({ type: eventType, date, venue, time, apVenue, apTime });
         }
       }
 
@@ -472,8 +510,7 @@
 
     async function loadFromSheet() {
       if (!SHEET_CSV_URL) {
-        renderSchedule(DUMMY_DATA);
-        document.getElementById('last-updated').textContent = 'ダミーデータ表示中（スプシ連携未設定）';
+        document.getElementById('last-updated').textContent = 'CSV URL未設定';
         return;
       }
 
